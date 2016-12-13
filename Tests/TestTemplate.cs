@@ -11,7 +11,7 @@ namespace  TEMPLATE
   {
     public TEMPLATETest()
     {
-      DBConfiguration.ConnectionString = "Data Source=(localdb)\\mssqllocaldb;Initial Catalog=todo_test;Integrated Security=SSPI;";
+      DBConfiguration.ConnectionString = "Data Source=(localdb)\\mssqllocaldb;Initial Catalog=TEMPLATE_test;Integrated Security=SSPI;";
     }
 
     [Fact]
