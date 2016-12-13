@@ -1,7 +1,7 @@
 using System.Data;
 using System.Data.SqlClient;
 
-namespace TEMPLATE
+namespace University.Objects
 {
   public class DB
   {
