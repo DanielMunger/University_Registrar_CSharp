@@ -8,7 +8,7 @@ namespace University.Objects
 {
   public class CourseTest : IDisposable
   {
-
+    DateTime newDateTime = new DateTime(12,3,4);
     public CourseTest()
     {
       DBConfiguration.ConnectionString = "Data Source=(localdb)\\mssqllocaldb;Initial Catalog=registrar_test;Integrated Security=SSPI;";
@@ -64,6 +64,18 @@ namespace University.Objects
 
       //Assert
       Assert.Equal(testCourse, foundCourse);
+    }
+    public void AddCourse_AddsCourseToStudent_True()
+    {
+      Course newCourse = new Course("Ryan", "ryan101");
+      newCourse.Save();
+      Student newStudent = new Student("Ryan", newDateTime);
+      newStudent.Save();
+      newStudent.AddCourse(newCourse);
+      List<Course> expected = new List<Course>{newCourse};
+      List<Course> result = newStudent.GetCourses();
+
+      Assert.Equal(expected, result);
     }
 
     public void Dispose()
