@@ -13,7 +13,7 @@
         <ul>
         @foreach(var course in Model)
         {
-          <li><a href="/course/@course.GetId()">@course.GetName(), @course.GetCourseNumber()</a></li>
+          <li><a href="/course/@course.GetId()">@course.GetName(), @course.GetCourseNumber()</a>| <a href="/course/delete/@course.GetId()">Delete this Course</a></li>
 
         }
       </ul>

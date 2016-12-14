@@ -69,6 +69,24 @@ namespace University
         newStudent.AddCourse(newCourse);
         return View["success.cshtml"];
       };
+      Get["/student/delete/{id}"] = parameters => {
+        Student newStudent = Student.Find(parameters.id);
+        return View["student_delete.cshtml", newStudent];
+      };
+      Delete["/student/delete/{id}"] = parameters => {
+        Student selectedStudent = Student.Find(parameters.id);
+        selectedStudent.Delete();
+        return View["success.cshtml"];
+      };
+      Get["/course/delete/{id}"] = parameters => {
+        Course newCourse = Course.Find(parameters.id);
+        return View["course_delete.cshtml", newCourse];
+      };
+      Delete["/course/delete/{id}"] = parameters => {
+        Course selectedCourse = Course.Find(parameters.id);
+        selectedCourse.Delete();
+        return View["success.cshtml"];
+      };
     }
   }
 }
