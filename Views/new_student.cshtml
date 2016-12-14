@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Add Student</title>
+    <link href="/Content/css/bootstrap.min.css" rel="stylesheet" type="text/css">
+    <link href="/Content/css/styles.css" rel="stylesheet" type="text/css">
+  </head>
+  <body>
+    <div class="container">
+      <form action="/student/new" method="post">
+        <label for="student-name">Student Name:</label>
+        <input type="text" name="student-name" id="student-name">
+        <label for="student-enrollment">Student Enrollment Date:</label>
+        <input type="date" name="student-enrollment" id="student-enrollment">
+        <button type="submit" name="button">Create Student</button>
+      </form>
+      @if(Model!=null)
+      {
+        <div class="well">
+          <h4>The Student Has Been Created</h4>
+          <p>Student Name: @Model.GetName()</p>
+          <p>Student Enrollment Date: @Model.GetEnrollmentDate()</p>
+        </div>
+      }
+    </div>
+      <div class="container">
+        <h5><a href="/students">View All Students</a></h5>
+        <h5><a href="/courses">View All Courses</a></h5>
+      </div>
+  </body>
+</html>

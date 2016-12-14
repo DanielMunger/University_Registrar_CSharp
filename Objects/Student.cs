@@ -143,7 +143,7 @@ namespace University.Objects
       SqlConnection conn = DB.Connection();
       conn.Open();
 
-      SqlCommand cmd = new SqlCommand("INSERT INT0 courses_students (course_id, student_id) VALUES (@CourseId, @StudentId);", conn);
+      SqlCommand cmd = new SqlCommand("INSERT INTO courses_students (course_id, student_id) VALUES (@CourseId, @StudentId);", conn);
 
       SqlParameter courseIdParameter = new SqlParameter("@CourseId", newCourse.GetId());
       cmd.Parameters.Add(courseIdParameter);
@@ -158,6 +158,7 @@ namespace University.Objects
         conn.Close();
       }
     }
+
     public List<Course> GetCourses()
     {
       SqlConnection conn = DB.Connection();
@@ -188,37 +189,37 @@ namespace University.Objects
     }
 
 
-    // public void Edit(string description)
-    // {
-    //   SqlConnection conn = DB.Connection();
-    //   conn.Open();
-    //   Console.WriteLine(this.TEMPLATEdescription);
-    //
-    //   SqlCommand cmd = new SqlCommand("UPDATE template SET TEMPLATEdescription = @TEMPLATEdescription WHERE id = @TEMPLATEId;", conn);
-    //
-    //   SqlParameter TEMPLATEParameter = new SqlParameter("@TEMPLATEId", this.Id);
-    //
-    //    SqlParameter TEMPLATEdescriptionParameter = new SqlParameter("TEMPLATEdescription", description);
-    //
-    //    cmd.Parameters.Add(TEMPLATEParameter);
-    //    cmd.Parameters.Add(TEMPLATEdescriptionParameter);
-    //
-    //    SqlDataReader rdr = cmd.ExecuteReader();
-    //
-    //    while(rdr.Read())
-    //    {
-    //      this.Id = rdr.GetInt32(0);
-    //      this.TEMPLATEdescription = rdr.GetString(1);
-    //    }
-    //    if (rdr != null)
-    //    {
-    //      rdr.Close();
-    //    }
-    //    if (conn != null)
-    //    {
-    //      conn.Close();
-    //    }
-    //  }
+    public void Update(string StudentName, DateTime date)
+    {
+      SqlConnection conn = DB.Connection();
+      conn.Open();
+
+      SqlCommand cmd = new SqlCommand("UPDATE students SET name = @StudentName, enrollment_date=@EnrollmentDate WHERE id = @StudentId;", conn);
+
+      SqlParameter studentIdParameter = new SqlParameter("@StudentId", this.GetId());
+      SqlParameter studentNameParameter = new SqlParameter("@StudentName", StudentName);
+      SqlParameter studentEnrollmentParameter = new SqlParameter("@EnrollmentDate", date);
+       cmd.Parameters.Add(studentIdParameter);
+       cmd.Parameters.Add(studentNameParameter);
+       cmd.Parameters.Add(studentEnrollmentParameter);
+
+       SqlDataReader rdr = cmd.ExecuteReader();
+
+       while(rdr.Read())
+       {
+         _id = rdr.GetInt32(0);
+         _name = rdr.GetString(1);
+        _enrollmentDate = rdr.GetDateTime(2);
+       }
+       if (rdr != null)
+       {
+         rdr.Close();
+       }
+       if (conn != null)
+       {
+         conn.Close();
+       }
+     }
     //
     // public static List<TEMPLATE> Sort()
     // {
@@ -249,20 +250,21 @@ namespace University.Objects
     //
     //   return allTEMPLATE;
     // }
-    // public void Delete()
-    // {
-    //   SqlConnection conn = DB.Connection();
-    //   conn.Open();
-    //   SqlCommand cmd = new SqlCommand("DELETE FROM template WHERE id = @TEMPLATEId; DELETE FROM join_table WHERE template_id = @TEMPLATEId", conn);
-    //   SqlParameter TEMPLATEIdParameter = new SqlParameter("@TEMPLATEId", this.Id);
-    //   cmd.Parameters.Add(TEMPLATEIdParameter);
-    //   cmd.ExecuteNonQuery();
-    //
-    //   if(conn!=null)
-    //   {
-    //     conn.Close();
-    //   }
-    // }
+    public void Delete()
+    {
+      SqlConnection conn = DB.Connection();
+      conn.Open();
+      SqlCommand cmd = new SqlCommand("DELETE FROM students WHERE id = @StudentId; DELETE FROM courses_students WHERE student_id = @StudentId", conn);
+      SqlParameter studentIdParameter = new SqlParameter("@StudentId", this.GetId());
+      cmd.Parameters.Add(studentIdParameter);
+      cmd.ExecuteNonQuery();
+
+      if(conn!=null)
+      {
+        conn.Close();
+      }
+    }
+
     public static void DeleteAll()
     {
       SqlConnection conn = DB.Connection();

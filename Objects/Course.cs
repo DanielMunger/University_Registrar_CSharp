@@ -159,6 +159,7 @@ namespace University.Objects
         conn.Close();
       }
     }
+
     public List<Student> GetStudents()
     {
       SqlConnection conn = DB.Connection();
@@ -188,38 +189,38 @@ namespace University.Objects
       return students;
     }
 
-    // public void Edit(string description)
-    // {
-    //   SqlConnection conn = DB.Connection();
-    //   conn.Open();
-    //   Console.WriteLine(this.TEMPLATEdescription);
-    //
-    //   SqlCommand cmd = new SqlCommand("UPDATE template SET TEMPLATEdescription = @TEMPLATEdescription WHERE id = @TEMPLATEId;", conn);
-    //
-    //   SqlParameter TEMPLATEParameter = new SqlParameter("@TEMPLATEId", this.Id);
-    //
-    //    SqlParameter TEMPLATEdescriptionParameter = new SqlParameter("TEMPLATEdescription", description);
-    //
-    //    cmd.Parameters.Add(TEMPLATEParameter);
-    //    cmd.Parameters.Add(TEMPLATEdescriptionParameter);
-    //
-    //    SqlDataReader rdr = cmd.ExecuteReader();
-    //
-    //    while(rdr.Read())
-    //    {
-    //      this.Id = rdr.GetInt32(0);
-    //      this.TEMPLATEdescription = rdr.GetString(1);
-    //    }
-    //    if (rdr != null)
-    //    {
-    //      rdr.Close();
-    //    }
-    //    if (conn != null)
-    //    {
-    //      conn.Close();
-    //    }
-    //  }
-    //
+    public void Update(string CourseName, string CourseNumber)
+    {
+      SqlConnection conn = DB.Connection();
+      conn.Open();
+
+      SqlCommand cmd = new SqlCommand("UPDATE courses SET name = @CourseName, number=@CourseNumber WHERE id = @CourseId;", conn);
+
+      SqlParameter courseIdParameter = new SqlParameter("@CourseId", this.GetId());
+      SqlParameter courseNameParameter = new SqlParameter("@CourseName", CourseName);
+      SqlParameter courseNumberParameter = new SqlParameter("@CourseNumber", CourseNumber);
+       cmd.Parameters.Add(courseIdParameter);
+       cmd.Parameters.Add(courseNameParameter);
+       cmd.Parameters.Add(courseNumberParameter);
+
+       SqlDataReader rdr = cmd.ExecuteReader();
+
+       while(rdr.Read())
+       {
+         _id = rdr.GetInt32(0);
+         _name = rdr.GetString(1);
+        _courseNumber = rdr.GetString(2);
+       }
+       if (rdr != null)
+       {
+         rdr.Close();
+       }
+       if (conn != null)
+       {
+         conn.Close();
+       }
+     }
+
     // public static List<TEMPLATE> Sort()
     // {
     //   List<Task> allTEMPLATE = new List<Task>{};
@@ -263,6 +264,22 @@ namespace University.Objects
     //     conn.Close();
     //   }
     // }
+
+    public void Delete()
+    {
+      SqlConnection conn = DB.Connection();
+      conn.Open();
+      SqlCommand cmd = new SqlCommand("DELETE FROM courses WHERE id = @CourseId; DELETE FROM courses_students WHERE course_id = @CourseId", conn);
+      SqlParameter courseIdParameter = new SqlParameter("@CourseId", this.GetId());
+      cmd.Parameters.Add(courseIdParameter);
+      cmd.ExecuteNonQuery();
+
+      if(conn!=null)
+      {
+        conn.Close();
+      }
+    }
+
     public static void DeleteAll()
     {
       SqlConnection conn = DB.Connection();

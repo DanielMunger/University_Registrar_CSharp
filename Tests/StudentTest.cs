@@ -6,10 +6,10 @@ using System.Data.SqlClient;
 
 namespace University.Objects
 {
-  public class CourseTest : IDisposable
+  public class StudentTest : IDisposable
   {
-    DateTime newDateTime = new DateTime(12,3,4);
-    public CourseTest()
+    DateTime newDateTime = new DateTime(2016, 12, 13);
+    public StudentTest()
     {
       DBConfiguration.ConnectionString = "Data Source=(localdb)\\mssqllocaldb;Initial Catalog=registrar_test;Integrated Security=SSPI;";
     }
@@ -18,21 +18,21 @@ namespace University.Objects
     public void ReplacesEqualObjects_True()
     {
 
-      Course CourseOne = new Course("Daniel", "DAN101");
-      Course CourseTwo = new Course("Daniel",  "DAN101");
+      Student studentOne = new Student("Daniel", newDateTime);
+      Student studentTwo = new Student("Daniel", newDateTime);
 
-      Assert.Equal(CourseOne, CourseTwo);
+      Assert.Equal(studentOne, studentTwo);
     }
     [Fact]
     public void GetAll_true()
     {
       //Arrange
-      Course CourseOne = new Course("Daniel",  "DAN101");
-      CourseOne.Save();
-      Course CourseTwo = new Course("Ryan",  "RYAN101");
-      CourseTwo.Save();
+      Student studentOne = new Student("Daniel", newDateTime);
+      studentOne.Save();
+      Student studentTwo = new Student("Ryan", newDateTime);
+      studentTwo.Save();
       // Act
-      int result = Course.GetAll().Count;
+      int result = Student.GetAll().Count;
 
       //Assert
       Assert.Equal(2, result);
@@ -42,29 +42,31 @@ namespace University.Objects
     public void Save_SavesToDatabase_true()
     {
       //Arrange
-      Course testCourse = new Course("Jimmy", "Jim101");
-      testCourse.Save();
+      Student testStudent = new Student("Jimmy", newDateTime);
+      testStudent.Save();
       //Act
 
-      List<Course> result = Course.GetAll();
-      List<Course> testList = new List<Course>{testCourse};
+      List<Student> result = Student.GetAll();
+      List<Student> testList = new List<Student>{testStudent};
       //Assert
       Assert.Equal(testList, result);
     }
 
     [Fact]
-    public void Find_FindsCourseInDatabase_true()
+    public void Find_FindsStudentInDatabase_true()
     {
       //Arrange
-      Course testCourse = new Course("Ryan", "RYAN101");
-      testCourse.Save();
+      Student testStudent = new Student("Ryan", newDateTime);
+      testStudent.Save();
 
       //Act
-      Course foundCourse = Course.Find(testCourse.GetId());
+      Student foundStudent = Student.Find(testStudent.GetId());
 
       //Assert
-      Assert.Equal(testCourse, foundCourse);
+      Assert.Equal(testStudent, foundStudent);
     }
+
+    [Fact]
     public void AddCourse_AddsCourseToStudent_True()
     {
       Course newCourse = new Course("Ryan", "ryan101");
@@ -78,10 +80,56 @@ namespace University.Objects
       Assert.Equal(expected, result);
     }
 
+    [Fact]
+    public void Test_Deletes_Student()
+    {
+      Student newStudent = new Student("Ryan", newDateTime);
+
+      newStudent.Save();
+      newStudent.Delete();
+
+      List<Student> expected = new List<Student>{};
+      List<Student> result = Student.GetAll();
+
+      Assert.Equal(expected, result);
+
+    }
+
+    [Fact]
+    public void Update_UpdatesDatabase_True()
+    {
+      Student newStudent = new Student("Ryan", newDateTime);
+      newStudent.Save();
+      newStudent.Update("Daniel", newDateTime);
+
+      Student testStudent = new Student("Daniel", newDateTime);
+      Student result = Student.Find(newStudent.GetId());
+
+      Assert.Equal(testStudent, result);
+    }
+
+    [Fact]
+    public void Delete_DeletesAssociation_True()
+    {
+      Student newStudent = new Student("Ryan", newDateTime);
+      newStudent.Save();
+      Course newCourse = new Course("Ryan", "Ryan101");
+      newCourse.Save();
+      newStudent.AddCourse(newCourse);
+      newStudent.Delete();
+
+      List<Course> result = newStudent.GetCourses();
+      List<Course> expected = new List<Course>{};
+      Assert.Equal(expected, result);
+
+    }
+
     public void Dispose()
     {
       Course.DeleteAll();
+      Student.DeleteAll();
     }
 
   }
+
 }
